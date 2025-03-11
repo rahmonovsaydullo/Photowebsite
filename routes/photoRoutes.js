@@ -12,5 +12,4 @@ photoRouter.post("/", authentication, addPhoto);
 photoRouter.get("/",  getPhotos); // authentication,
 photoRouter.get("/:userId", authentication, myPhotos);
 photoRouter.delete("/:id", authentication, deletePhoto);
-
 module.exports = photoRouter;

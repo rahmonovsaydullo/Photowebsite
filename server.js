@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const bcrypt = require('bcryptjs');
+
+
 
 // Importing routes
 const userRouter = require("./routes/userRoutes");
