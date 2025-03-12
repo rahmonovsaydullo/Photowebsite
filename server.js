@@ -18,6 +18,7 @@ app.use(cors());
 app.use('/', userRouter);
 app.use('/photos', photoRouter)
 app.use('/', likeRouter)
+app.use('/uploads', express.static('uploads'))
 
 const port = 4000;
 app.listen(port, () => {
