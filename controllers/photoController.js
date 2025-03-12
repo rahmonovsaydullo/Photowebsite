@@ -1,30 +1,7 @@
 const pool = require("../config/db");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken")
-const multer = require("multer");
 const path = require("path");
-
-// Configure multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Save images in the uploads folder
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
-  }
-});
-
-// File filter (only allow images)
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image/")) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only image files are allowed!"), false);
-  }
-};
-
-// Initizlize multer
-exports.upload = multer({ storage, fileFilter })
 
 
 
