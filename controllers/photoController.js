@@ -1,9 +1,4 @@
 const pool = require("../config/db");
-const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken")
-const path = require("path");
-
-
 
 
 exports.getPhotos = async (req, res) => {
@@ -62,9 +57,10 @@ exports.deletePhoto = async (req, res) => {
 exports.addPhoto = async (req, res) => {
   try {
     const { url, userId } = req.body;
+    const filepath = req.file.path
     const result = await pool.query(
-      "INSERT INTO photos (url, userId) VALUES ($1, $2) RETURNING *",
-      [url, userId]
+      "INSERT INTO photos (filepath, userId) VALUES ($1, $2) RETURNING *",
+      [filepath, userId]
     );
 
     res.status(201).json(result.rows[0]);
