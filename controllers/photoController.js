@@ -4,9 +4,10 @@ const pool = require("../config/db");
 exports.getPhotos = async (req, res) => {
   try {
     const { userId } = req.query;
+    const filepath = req.path.file
     const result = await pool.query(
       `select p.id, 
-        p.url, 
+        p.filepath, 
         CONCAT(u.first_name, ' ', u.last_name) as fullname,
         COUNT(photoId) as likeCount,
         EXISTS (SELECT * from likes WHERE userId = $1 and photoId = p.id) as isLiked
@@ -19,7 +20,10 @@ exports.getPhotos = async (req, res) => {
         GROUP BY p.id, u.id`,
       [userId]
     );
-    res.status(200).json(result.rows);
+    const photos = result.rows.map(photo => {
+      return { ...photo, url: "http://localhost:4000/" + photo.filepath }
+    })
+    res.status(200).json(photos);
   } catch (error) {
     console.log(error);
     res.status(500).send("Girigitton kodida nomaqbul hatolik mavjud");
@@ -29,11 +33,14 @@ exports.getPhotos = async (req, res) => {
 exports.myPhotos = async (req, res) => {
   try {
     const { userId } = req.params;
-    let result;
-    result = await pool.query("SELECT * FROM photos WHERE userId = $1", [
+    const result = await pool.query("SELECT * FROM photos WHERE userId = $1", [
       userId,
     ]);
-    return res.status(200).json(result.rows);
+
+    const photos = result.rows.map(photo => {
+      return { ...photo, url: "http://localhost:4000/" + photo.filepath }
+    })
+    return res.status(200).json(photos);
   } catch (error) {
     console.log(error);
     res.status(500).send("Girigitton kodida nomaqbul hatolik mavjud");
